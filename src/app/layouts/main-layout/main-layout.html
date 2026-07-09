@@ -1,15 +1,9 @@
-<header>
-  <h1>ManaMetrics</h1>
+<app-sidebar />
 
-  <nav>
-    <a routerLink="/">Dashboard</a>
-    |
-    <a routerLink="/decks">Decks</a>
-  </nav>
-</header>
+<div class="content">
+    <app-header />
 
-<hr>
-
-<main>
-  <router-outlet />
-</main>
+    <main>
+        <router-outlet />
+    </main>
+</div>
