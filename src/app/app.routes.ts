@@ -10,11 +10,17 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: Dashboard
+        component: Dashboard,
+        data: {
+          title: 'Dashboard'
+        }
       },
       {
         path: 'decks',
-        component: Decks
+        component: Decks,
+        data: {
+          title: 'Decks'
+        }
       }
     ]
   }

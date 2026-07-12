@@ -1,0 +1,52 @@
+:host {
+  display: block;
+  width: 250px;
+  height: 100vh;
+  background-color: #1b1d24;
+  border-right: 1px solid #2b2f3a;
+}
+
+nav {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 24px;
+
+  font-size: 1.2rem;
+  font-weight: 700;
+
+  border-bottom: 1px solid #2b2f3a;
+}
+
+a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 14px 24px;
+
+  color: #d7dbe7;
+  text-decoration: none;
+
+  transition: .2s;
+}
+
+a:hover {
+  background-color: #2a3040;
+  color: white;
+}
+
+.spacer {
+  flex: 1;
+}
+
+mat-icon {
+  font-size: 20px;
+}

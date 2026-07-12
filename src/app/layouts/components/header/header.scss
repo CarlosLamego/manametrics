@@ -1,0 +1,19 @@
+:host {
+  display: block;
+}
+
+header {
+  height: 64px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 24px;
+
+  border-bottom: 1px solid #2b2f3a;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.4rem;
+}
