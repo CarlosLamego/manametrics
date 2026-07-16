@@ -1,9 +1,11 @@
+@use '../../../../styles/variables' as *;
+
 :host {
   display: block;
-  width: 250px;
+  width: $sidebar-width;
   height: 100vh;
-  background-color: #1b1d24;
-  border-right: 1px solid #2b2f3a;
+  background-color: $sidebar-bg;
+  border-right: 1px solid $border-color;
 }
 
 nav {
@@ -13,16 +15,20 @@ nav {
 }
 
 .logo {
+  height: $header-height;
   display: flex;
   align-items: center;
   gap: 12px;
 
-  padding: 24px;
+  padding: 0 24px;
 
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: 700;
+  color: $text-primary;
 
-  border-bottom: 1px solid #2b2f3a;
+  border-bottom: 1px solid $border-color;
+
+  box-sizing: border-box;
 }
 
 a {
@@ -30,17 +36,19 @@ a {
   align-items: center;
   gap: 12px;
 
-  padding: 14px 24px;
-
-  color: #d7dbe7;
+  padding: 12px 16px;
+  color: $text-primary;
   text-decoration: none;
 
   transition: .2s;
+
+  border-radius: 8px;
+  margin: 4px 12px;
 }
 
 a:hover {
-  background-color: #2a3040;
-  color: white;
+  $sidebar-hover: #2a3040;
+  color: $text-primary;
 }
 
 .spacer {
@@ -49,4 +57,14 @@ a:hover {
 
 mat-icon {
   font-size: 20px;
+}
+
+.active {
+  background-color: #2d5bff;
+  color: white;
+  font-weight: 600;
+}
+
+.active mat-icon {
+  color: white;
 }
