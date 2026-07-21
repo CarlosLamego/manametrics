@@ -4,11 +4,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { Deck } from '../../../../models/deck.model';
 import { DeckService } from '../../../../services/deck.service';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { DeckDialog } from '../../components/deck-dialog/deck-dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-decks',
@@ -19,7 +20,8 @@ import { DeckDialog } from '../../components/deck-dialog/deck-dialog';
     MatInputModule,
     MatFormFieldModule,
     MatTableModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSnackBarModule
   ],
   templateUrl: './decks.html',
   styleUrl: './decks.scss',
@@ -33,8 +35,7 @@ export class Decks {
     'name',
   ];
 
-  dataSource: Deck[] = this.deckService.getAll();
-
+  dataSource = new MatTableDataSource<Deck>(this.deckService.getAll());
   openDeckDialog(): void {
     const dialogRef = this.dialog.open(DeckDialog);
 
@@ -43,9 +44,24 @@ export class Decks {
         return;
       }
 
+      console.log('Recebido:', result);
+
       this.deckService.add(result);
 
-      this.dataSource = this.deckService.getAll();
+      console.log('Service:', this.deckService.getAll());
+
+      this.dataSource.data = this.deckService.getAll();
+      console.log('DataSource:', this.dataSource);
+
+      this.snackBar.open(
+        'Deck cadastrado com sucesso!',
+        'Fechar',
+        {
+          duration: 3000
+        }
+      );
     });
   }
+
+  private readonly snackBar = inject(MatSnackBar);
 }
