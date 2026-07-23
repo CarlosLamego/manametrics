@@ -10,6 +10,7 @@ import { DeckService } from '../../../../services/deck.service';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { DeckDialog } from '../../components/deck-dialog/deck-dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-decks',
@@ -30,6 +31,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 export class Decks {
   private readonly deckService = inject(DeckService);
   private readonly dialog = inject(MatDialog);
+  private readonly router = inject(Router);
 
   displayedColumns: string[] = [
     'name',
@@ -61,6 +63,16 @@ export class Decks {
         }
       );
     });
+  }
+
+  applyFilter(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+
+    this.dataSource.filter = value.trim().toLowerCase();
+  }
+
+  openDeck(deck: Deck): void {
+    this.router.navigate(['/decks', deck.id]);
   }
 
   private readonly snackBar = inject(MatSnackBar);

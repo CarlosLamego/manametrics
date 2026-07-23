@@ -40,4 +40,8 @@ export class DeckService {
     });
   }
 
+  getById(id: number): Deck | undefined {
+    return this.decks.find(deck => deck.id === id);
+  }
+
 }

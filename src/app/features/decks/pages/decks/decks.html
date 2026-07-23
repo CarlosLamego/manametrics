@@ -14,11 +14,12 @@
             <div class="search-area">
                 <mat-form-field appearance="outline">
                     <mat-label>Buscar deck</mat-label>
-                    <input matInput placeholder="Digite o nome do deck" />
-                    <mat-icon matSuffix>search</mat-icon>
+                    <input matInput placeholder="Digite o nome do deck" (input)="applyFilter($event)" /> <mat-icon
+                        matSuffix>search</mat-icon>
                 </mat-form-field>
-
             </div>
+
+            @if (dataSource.data.length > 0) {
 
             <div class="table-container">
                 <table mat-table [dataSource]="dataSource">
@@ -31,15 +32,22 @@
                         </td>
                     </ng-container>
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openDeck(row)">
+                    </tr>
                 </table>
             </div>
+
+            } @else {
 
             <div class="empty-state">
                 <mat-icon>style</mat-icon>
                 <h2>Nenhum deck cadastrado</h2>
-                <p>Clique em "Novo Deck" para começar.</p>
+                <p>
+                    Clique em "Novo Deck" para começar.
+                </p>
             </div>
+
+            }
 
         </mat-card-content>
     </mat-card>
