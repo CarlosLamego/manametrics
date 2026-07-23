@@ -4,4 +4,12 @@
 
   <p>{{ deck().format }}</p>
 
+  <div class="deck-colors">
+    @for (color of deck().colors; track color) {
+    <span class="color-chip">
+      {{ color }}
+    </span>
+    }
+  </div>
+
 </section>
