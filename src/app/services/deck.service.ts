@@ -11,19 +11,25 @@ export class DeckService {
       id: 1,
       name: 'Izzet Phoenix',
       format: 'Pioneer',
-      colors: ['Blue', 'Red']
+      colors: ['Blue', 'Red'],
+      mainboard: [],
+      sideboard: []
     },
     {
       id: 2,
       name: 'Mono Green Devotion',
       format: 'Pioneer',
-      colors: ['Green']
+      colors: ['Green'],
+      mainboard: [],
+      sideboard: []
     },
     {
       id: 3,
       name: 'Azorius Control',
       format: 'Pioneer',
-      colors: ['White', 'Blue']
+      colors: ['White', 'Blue'],
+      mainboard: [],
+      sideboard: []
     }
   ];
 
@@ -36,7 +42,9 @@ export class DeckService {
       id: this.decks.length + 1,
       name: deck.name,
       format: deck.format,
-      colors: []
+      colors: [],
+      mainboard: [],
+      sideboard: []
     });
   }
 
