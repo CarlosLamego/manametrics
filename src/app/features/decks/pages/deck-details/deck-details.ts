@@ -4,6 +4,7 @@ import { Deck } from '../../../../models/deck.model';
 import { DeckService } from '../../../../services/deck.service';
 import { DeckHeader } from '../../components/deck-header/deck-header';
 import { ImportTxtService } from '../../../../services/import-txt.service';
+import { CardService } from '../../../../services/card.service';
 
 @Component({
   selector: 'app-deck-details',
@@ -14,6 +15,7 @@ import { ImportTxtService } from '../../../../services/import-txt.service';
 export class DeckDetails {
   private readonly route = inject(ActivatedRoute);
   private readonly deckService = inject(DeckService);
+  private readonly cardService = inject(CardService);
 
   deck?: Deck;
 
@@ -35,8 +37,11 @@ export class DeckDetails {
 
     this.deckService.importTxt(id, txt);
 
-    console.log(this.deck);
+    console.log(this.deck);    
+
+    this.cardService.getByName('Cast Down')
+    .subscribe(card => {
+      console.log(card);
+    });
   }
-
-
 }
