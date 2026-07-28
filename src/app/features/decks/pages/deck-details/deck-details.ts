@@ -34,8 +34,9 @@ export class DeckDetails {
     2 Duress
     4 Relic of Progenitus`;
 
-    this.importTxtService.import(txt);
-
+    const importedDeck = this.importTxtService.import(txt);
+    console.log(importedDeck.mainboard);
+    console.log(importedDeck.sideboard);
   }
 
 
