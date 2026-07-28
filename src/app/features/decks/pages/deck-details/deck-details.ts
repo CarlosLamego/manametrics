@@ -14,7 +14,6 @@ import { ImportTxtService } from '../../../../services/import-txt.service';
 export class DeckDetails {
   private readonly route = inject(ActivatedRoute);
   private readonly deckService = inject(DeckService);
-  private readonly importTxtService = inject(ImportTxtService);
 
   deck?: Deck;
 
@@ -34,9 +33,9 @@ export class DeckDetails {
     2 Duress
     4 Relic of Progenitus`;
 
-    const importedDeck = this.importTxtService.import(txt);
-    console.log(importedDeck.mainboard);
-    console.log(importedDeck.sideboard);
+    this.deckService.importTxt(id, txt);
+
+    console.log(this.deck);
   }
 
 

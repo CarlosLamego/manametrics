@@ -1,8 +1,25 @@
 @if (deck) {
 
 <section class="page">
-  <app-deck-header [deck]="deck">
-  </app-deck-header>
+
+  <app-deck-header [deck]="deck"></app-deck-header>
+
+  <h2>Mainboard</h2>
+
+  @for (card of deck.mainboard; track card.name) {
+
+    <p>{{ card.quantity }}x {{ card.name }}</p>
+
+  }
+
+  <h2>Sideboard</h2>
+
+  @for (card of deck.sideboard; track card.name) {
+
+    <p>{{ card.quantity }}x {{ card.name }}</p>
+
+  }
+
 </section>
 
 } @else {

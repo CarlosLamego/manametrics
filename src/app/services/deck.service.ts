@@ -1,10 +1,21 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { ImportTxtService } from './import-txt.service';
 import { Deck } from '../models/deck.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DeckService {
+  private readonly importTxtService = inject(ImportTxtService);
+  importTxt(id: number, txt: string): void {
+    const deck = this.getById(id);
+    if (!deck) {
+      return;
+    }
+    const importedDeck = this.importTxtService.import(txt);
+    deck.mainboard = importedDeck.mainboard;
+    deck.sideboard = importedDeck.sideboard;
+  }
 
   private decks: Deck[] = [
     {
