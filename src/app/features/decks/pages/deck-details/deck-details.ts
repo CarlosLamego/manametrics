@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Deck } from '../../../../models/deck.model';
 import { DeckService } from '../../../../services/deck.service';
 import { DeckHeader } from '../../components/deck-header/deck-header';
-import { ImportTxtService } from '../../../../services/import-txt.service';
 import { CardService } from '../../../../services/card.service';
+import { Card } from '../../../../models/card.model';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-deck-details',
@@ -12,20 +13,25 @@ import { CardService } from '../../../../services/card.service';
   templateUrl: './deck-details.html',
   styleUrl: './deck-details.scss',
 })
-export class DeckDetails {
+export class DeckDetails implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly deckService = inject(DeckService);
   private readonly cardService = inject(CardService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   deck?: Deck;
+  card?: Card;
 
   constructor() {
+    console.log('DeckDetails criado');
+  }
+
+  ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-
     this.deck = this.deckService.getById(id);
-
     console.log(this.deck);
 
+    console.log('ngOnInit');
 
     const txt = `2 Accursed Marauder
     2 Blood Fountain
@@ -37,11 +43,18 @@ export class DeckDetails {
 
     this.deckService.importTxt(id, txt);
 
-    console.log(this.deck);    
+    console.log(this.deck);
 
     this.cardService.getByName('Cast Down')
-    .subscribe(card => {
-      console.log(card);
-    });
+      .subscribe({
+        next: card => {
+          this.card = card;
+          this.cdr.detectChanges();
+        },
+        error: err => console.error(err)
+      });
+    setInterval(() => {
+      console.log('Card atual:', this.card);
+    }, 3000);
   }
 }

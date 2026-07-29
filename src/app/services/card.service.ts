@@ -11,21 +11,20 @@ export class CardService {
 
     private readonly http = inject(HttpClient);
 
-getByName(name: string) {
-  return this.http
-    .get<ScryfallCardResponse>(
-      `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}`
-    )
-    .pipe(
-      map(card => ({
-        name: card.name,
-        manaCost: card.mana_cost,
-        type: card.type_line,
-        oracleText: card.oracle_text,
-        image: card.image_uris.normal,
-        colors: card.colors
-      } as Card))
-    );
-}
-
+    getByName(name: string) {
+        return this.http
+            .get<ScryfallCardResponse>(
+                `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}`
+            )
+            .pipe(
+                map(card => ({
+                    name: card.name,
+                    manaCost: card.mana_cost,
+                    type: card.type_line,
+                    oracleText: card.oracle_text,
+                    image: card.image_uris.normal,
+                    colors: card.colors
+                } as Card))
+            );
+    }
 }

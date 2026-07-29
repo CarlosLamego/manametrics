@@ -1,3 +1,5 @@
+<p>Card existe? {{ !!card }}</p>
+
 @if (deck) {
 
 <section class="page">
@@ -6,18 +8,12 @@
 
   <h2>Mainboard</h2>
 
-  @for (card of deck.mainboard; track card.name) {
-
-    <p>{{ card.quantity }}x {{ card.name }}</p>
-
+  @for (deckCard of deck.mainboard; track deckCard.name) {
+  <p>{{ deckCard.quantity }}x {{ deckCard.name }}</p>
   }
 
-  <h2>Sideboard</h2>
-
-  @for (card of deck.sideboard; track card.name) {
-
-    <p>{{ card.quantity }}x {{ card.name }}</p>
-
+  @for (deckCard of deck.sideboard; track deckCard.name) {
+  <p>{{ deckCard.quantity }}x {{ deckCard.name }}</p>
   }
 
 </section>
@@ -29,3 +25,15 @@
 </section>
 
 }
+
+@if (true) {
+
+<h2>Teste</h2>
+
+<p>{{ card?.name }}</p>
+
+<img [src]="card?.image" width="250">
+
+}
+
+<p>Nome: {{ card?.name }}</p>
