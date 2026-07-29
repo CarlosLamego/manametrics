@@ -22,16 +22,9 @@ export class DeckDetails implements OnInit {
   deck?: Deck;
   card?: Card;
 
-  constructor() {
-    console.log('DeckDetails criado');
-  }
-
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.deck = this.deckService.getById(id);
-    console.log(this.deck);
-
-    console.log('ngOnInit');
 
     const txt = `2 Accursed Marauder
     2 Blood Fountain
@@ -43,8 +36,6 @@ export class DeckDetails implements OnInit {
 
     this.deckService.importTxt(id, txt);
 
-    console.log(this.deck);
-
     this.cardService.getByName('Cast Down')
       .subscribe({
         next: card => {
@@ -53,8 +44,6 @@ export class DeckDetails implements OnInit {
         },
         error: err => console.error(err)
       });
-    setInterval(() => {
-      console.log('Card atual:', this.card);
-    }, 3000);
+
   }
 }
