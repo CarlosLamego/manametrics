@@ -6,10 +6,12 @@ import { DeckHeader } from '../../components/deck-header/deck-header';
 import { CardService } from '../../../../services/card.service';
 import { Card } from '../../../../models/card.model';
 import { ChangeDetectorRef } from '@angular/core';
+import { DeckCard } from '../../../../models/deck-card.model';
+import { DeckCardRow } from '../../components/deck-card-row/deck-card-row';
 
 @Component({
   selector: 'app-deck-details',
-  imports: [DeckHeader],
+  imports: [DeckHeader, DeckCardRow],
   templateUrl: './deck-details.html',
   styleUrl: './deck-details.scss',
 })
@@ -20,7 +22,6 @@ export class DeckDetails implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
 
   deck?: Deck;
-  card?: Card;
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -36,14 +37,44 @@ export class DeckDetails implements OnInit {
 
     this.deckService.importTxt(id, txt);
 
-    this.cardService.getByName('Cast Down')
-      .subscribe({
-        next: card => {
-          this.card = card;
-          this.cdr.detectChanges();
-        },
-        error: err => console.error(err)
-      });
+    this.deck = this.deckService.getById(id);
+
+    this.loadCardImages();
 
   }
+
+  private loadCardImages(): void {
+
+    if (!this.deck) {
+      return;
+    }
+
+    this.loadImages(this.deck.mainboard);
+    this.loadImages(this.deck.sideboard);
+
+  }
+
+  private loadImages(cards: DeckCard[]): void {
+
+    for (const deckCard of cards) {
+
+      this.cardService.getByName(deckCard.name)
+        .subscribe({
+
+          next: card => {
+            deckCard.card = card;
+            this.cdr.detectChanges();
+          },
+
+          error: err => {
+            console.error(`Erro ao buscar ${deckCard.name}`);
+            console.error(err);
+          }
+
+        });
+
+    }
+
+  }
+
 }

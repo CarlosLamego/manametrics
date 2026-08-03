@@ -1,0 +1,36 @@
+.deck-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    padding: .5rem;
+    border-radius: 8px;
+
+    transition: .2s;
+
+
+    position:relative;
+}
+
+.deck-card:hover {
+    background: rgba(255,255,255,.05);
+}
+
+img {
+    width: 55px;
+    border-radius: 4px;
+    flex-shrink: 0;
+
+    transition: .2s;
+}
+
+.deck-card:hover img {
+    transform: scale(2.2);
+    z-index: 100;
+}
+
+.deck-card:hover app-card-preview{
+
+    display:block;
+
+}

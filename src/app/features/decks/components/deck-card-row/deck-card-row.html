@@ -1,0 +1,24 @@
+<div class="deck-card">
+
+    @if (deckCard().card) {
+
+    <img [src]="deckCard().card!.image" [alt]="deckCard().name">
+
+    <app-card-preview [card]="deckCard().card!">
+    </app-card-preview>
+
+    }
+
+    <span class="quantity">
+
+        {{ deckCard().quantity }}x
+
+    </span>
+
+    <span class="name">
+
+        {{ deckCard().name }}
+
+    </span>
+
+</div>
