@@ -2,7 +2,8 @@
 
 <section class="page">
 
-  <app-deck-header [deck]="deck"></app-deck-header>
+  <app-deck-header [deck]="deck" (importDeck)="openImportDialog()">
+  </app-deck-header>
 
   <section class="deck-columns">
 

@@ -8,6 +8,8 @@ import { Card } from '../../../../models/card.model';
 import { ChangeDetectorRef } from '@angular/core';
 import { DeckCard } from '../../../../models/deck-card.model';
 import { DeckCardRow } from '../../components/deck-card-row/deck-card-row';
+import { MatDialog } from '@angular/material/dialog';
+import { ImportDeckDialog } from '../../components/import-deck-dialog/import-deck-dialog';
 
 @Component({
   selector: 'app-deck-details',
@@ -17,30 +19,17 @@ import { DeckCardRow } from '../../components/deck-card-row/deck-card-row';
 })
 export class DeckDetails implements OnInit {
   private readonly route = inject(ActivatedRoute);
-  private readonly deckService = inject(DeckService);
-  private readonly cardService = inject(CardService);
-  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly _deckService = inject(DeckService);
+  private readonly _cardService = inject(CardService);
+  private readonly _cdr = inject(ChangeDetectorRef);
+  private readonly _dialog = inject(MatDialog);
 
   deck?: Deck;
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.deck = this.deckService.getById(id);
-
-    const txt = `2 Accursed Marauder
-    2 Blood Fountain
-    2 Bojuka Bog
-    4 Cast Down
-
-    2 Duress
-    4 Relic of Progenitus`;
-
-    this.deckService.importTxt(id, txt);
-
-    this.deck = this.deckService.getById(id);
-
+    this.deck = this._deckService.getById(id);
     this.loadCardImages();
-
   }
 
   private loadCardImages(): void {
@@ -48,33 +37,39 @@ export class DeckDetails implements OnInit {
     if (!this.deck) {
       return;
     }
-
     this.loadImages(this.deck.mainboard);
     this.loadImages(this.deck.sideboard);
-
   }
-
   private loadImages(cards: DeckCard[]): void {
 
     for (const deckCard of cards) {
 
-      this.cardService.getByName(deckCard.name)
+      this._cardService.getByName(deckCard.name)
         .subscribe({
-
           next: card => {
             deckCard.card = card;
-            this.cdr.detectChanges();
+            this._cdr.detectChanges();
           },
-
           error: err => {
             console.error(`Erro ao buscar ${deckCard.name}`);
             console.error(err);
           }
-
         });
-
     }
-
   }
+openImportDialog(): void {
+
+  const dialogRef = this._dialog.open(ImportDeckDialog, {
+    width: '700px'
+  });
+  dialogRef.afterClosed().subscribe(result => {
+    if (!result || !this.deck) {
+      return;
+    }
+    this._deckService.importTxt(this.deck.id, result);
+    this.loadCardImages();
+  });
+
+}
 
 }

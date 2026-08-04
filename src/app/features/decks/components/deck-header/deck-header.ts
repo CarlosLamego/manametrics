@@ -1,5 +1,6 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { Deck } from '../../../../models/deck.model';
+
 
 
 @Component({
@@ -10,4 +11,11 @@ import { Deck } from '../../../../models/deck.model';
 })
 export class DeckHeader {
   deck = input.required<Deck>();
+
+  importDeck = output<void>();
+
+    onImportClick(): void {
+    console.log('HEADER');
+    this.importDeck.emit();
+  }
 }

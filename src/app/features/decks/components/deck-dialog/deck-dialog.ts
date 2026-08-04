@@ -25,7 +25,8 @@ export class DeckDialog {
 
   deckForm = this.fb.group({
     name: ['', Validators.required],
-    format: ['', Validators.required]
+    format: ['', Validators.required],
+    decklist: ['']
   });
 
   private readonly dialogRef = inject(MatDialogRef);

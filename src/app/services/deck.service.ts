@@ -14,20 +14,31 @@ export class DeckService {
     this._load();
   }
 
-
   getAll(): Deck[] {
     return this._decks;
   }
 
-  add(deck: Pick<Deck, 'name' | 'format'>): void {
-    this._decks.push({
+  add(deck: {
+    name: string;
+    format: string;
+    decklist?: string;
+  }): void {
+    const newDeck: Deck = {
       id: this._decks.length + 1,
       name: deck.name,
       format: deck.format,
       colors: [],
       mainboard: [],
       sideboard: []
-    });
+    };
+    if (deck.decklist?.trim()) {
+      const importedDeck = this._importTxtService.import(deck.decklist);
+
+      newDeck.mainboard = importedDeck.mainboard;
+      newDeck.sideboard = importedDeck.sideboard;
+    }
+    this._decks.push(newDeck);
+    this._save();
   }
 
   getById(id: number): Deck | undefined {
@@ -42,8 +53,8 @@ export class DeckService {
     const importedDeck = this._importTxtService.import(txt);
     deck.mainboard = importedDeck.mainboard;
     deck.sideboard = importedDeck.sideboard;
+    this._save();
   }
-
 
   private _load(): void {
     const data = localStorage.getItem(this._storageKey);
@@ -64,31 +75,31 @@ export class DeckService {
 
 
   private _createDefaultDecks(): Deck[] {
-  return [
-    {
-      id: 1,
-      name: 'Izzet Phoenix',
-      format: 'Pioneer',
-      colors: ['Blue', 'Red'],
-      mainboard: [],
-      sideboard: []
-    },
-    {
-      id: 2,
-      name: 'Mono Green Devotion',
-      format: 'Pioneer',
-      colors: ['Green'],
-      mainboard: [],
-      sideboard: []
-    },
-    {
-      id: 3,
-      name: 'Azorius Control',
-      format: 'Pioneer',
-      colors: ['White', 'Blue'],
-      mainboard: [],
-      sideboard: []
-    }
-  ];
-}
+    return [
+      {
+        id: 1,
+        name: 'Izzet Phoenix',
+        format: 'Pioneer',
+        colors: ['Blue', 'Red'],
+        mainboard: [],
+        sideboard: []
+      },
+      {
+        id: 2,
+        name: 'Mono Green Devotion',
+        format: 'Pioneer',
+        colors: ['Green'],
+        mainboard: [],
+        sideboard: []
+      },
+      {
+        id: 3,
+        name: 'Azorius Control',
+        format: 'Pioneer',
+        colors: ['White', 'Blue'],
+        mainboard: [],
+        sideboard: []
+      }
+    ];
+  }
 }
