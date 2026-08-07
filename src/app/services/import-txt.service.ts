@@ -40,7 +40,6 @@ export class ImportTxtService {
         const quantity = Number(parts[0]);
         const name = parts.slice(1).join(' ');
         return {
-            id: 0,
             quantity,
             name
         };

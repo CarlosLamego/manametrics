@@ -10,6 +10,9 @@ import { DeckCard } from '../../../../models/deck-card.model';
 import { DeckCardRow } from '../../components/deck-card-row/deck-card-row';
 import { MatDialog } from '@angular/material/dialog';
 import { ImportDeckDialog } from '../../components/import-deck-dialog/import-deck-dialog';
+import { DeckBuilderService } from '../../../../services/deck-builder.service';
+import { forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-deck-details',
@@ -23,6 +26,7 @@ export class DeckDetails implements OnInit {
   private readonly _cardService = inject(CardService);
   private readonly _cdr = inject(ChangeDetectorRef);
   private readonly _dialog = inject(MatDialog);
+  private readonly _deckBuilderService = inject(DeckBuilderService);
 
   deck?: Deck;
 
@@ -37,39 +41,63 @@ export class DeckDetails implements OnInit {
     if (!this.deck) {
       return;
     }
-    this.loadImages(this.deck.mainboard);
-    this.loadImages(this.deck.sideboard);
-  }
-  private loadImages(cards: DeckCard[]): void {
+    const cards = [
+      ...this.deck.mainboard,
+      ...this.deck.sideboard
+    ];
 
-    for (const deckCard of cards) {
-
-      this._cardService.getByName(deckCard.name)
-        .subscribe({
-          next: card => {
-            deckCard.card = card;
-            this._cdr.detectChanges();
-          },
-          error: err => {
-            console.error(`Erro ao buscar ${deckCard.name}`);
-            console.error(err);
-          }
-        });
-    }
-  }
-openImportDialog(): void {
-
-  const dialogRef = this._dialog.open(ImportDeckDialog, {
-    width: '700px'
-  });
-  dialogRef.afterClosed().subscribe(result => {
-    if (!result || !this.deck) {
+    if (cards.length === 0) {
       return;
     }
-    this._deckService.importTxt(this.deck.id, result);
-    this.loadCardImages();
-  });
+    this.loadImages(cards);
+  }
 
-}
+  private loadImages(cards: DeckCard[]): void {
+    forkJoin(
+      cards.map(deckCard =>
+        this._cardService.getByName(deckCard.name).pipe(
+          map(card => {
+            deckCard.card = card;
+            return card;
+          })
+        )
+      )
+    ).subscribe({
+      next: () => {
+        this.updateDeckColors();
+        this._cdr.detectChanges();
+      },
+      error: err => {
+        console.error(err);
+      }
+    });
+  }
+  openImportDialog(): void {
+    const dialogRef = this._dialog.open(ImportDeckDialog, {
+      width: '700px'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result || !this.deck) {
+        return;
+      }
+      this._deckService.importTxt(this.deck.id, result);
+      this.loadCardImages();
+
+    });
+  }
+  private updateDeckColors(): void {
+
+    if (!this.deck) {
+      return;
+    }
+
+    this.deck.colors =
+      this._deckBuilderService.calculateColors(this.deck);
+
+    this._deckService.save();
+
+    this._cdr.detectChanges();
+
+  }
 
 }

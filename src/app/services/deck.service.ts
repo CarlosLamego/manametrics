@@ -1,14 +1,16 @@
 import { inject, Injectable } from '@angular/core';
-import { ImportTxtService } from './import-txt.service';
 import { Deck } from '../models/deck.model';
+import { DeckBuilderService } from './deck-builder.service';
+import { CardService } from './card.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DeckService {
-  private readonly _importTxtService = inject(ImportTxtService);
+  private readonly _deckBuilderService = inject(DeckBuilderService);
   private readonly _storageKey = 'manametrics.decks';
   private _decks: Deck[] = [];
+  private readonly _cardService = inject(CardService);
 
   constructor() {
     this._load();
@@ -23,6 +25,17 @@ export class DeckService {
     format: string;
     decklist?: string;
   }): void {
+
+    this._decks.push(this._createDeck(deck));
+    this._save();
+  }
+
+  private _createDeck(deck: {
+    name: string;
+    format: string;
+    decklist?: string;
+  }): Deck {
+
     const newDeck: Deck = {
       id: this._decks.length + 1,
       name: deck.name,
@@ -31,18 +44,43 @@ export class DeckService {
       mainboard: [],
       sideboard: []
     };
+
     if (deck.decklist?.trim()) {
-      const importedDeck = this._importTxtService.import(deck.decklist);
+      const importedDeck = this._deckBuilderService.build(deck.decklist);
 
       newDeck.mainboard = importedDeck.mainboard;
       newDeck.sideboard = importedDeck.sideboard;
     }
-    this._decks.push(newDeck);
-    this._save();
+
+    return newDeck;
   }
 
   getById(id: number): Deck | undefined {
     return this._decks.find(deck => deck.id === id);
+  }
+
+  private _sanitizeDecks(): Deck[] {
+
+    return this._decks.map(deck => ({
+
+      ...deck,
+
+      mainboard: deck.mainboard.map(deckCard => ({
+        quantity: deckCard.quantity,
+        name: deckCard.name
+      })),
+
+      sideboard: deck.sideboard.map(deckCard => ({
+        quantity: deckCard.quantity,
+        name: deckCard.name
+      }))
+
+    }));
+
+  }
+
+  save(): void {
+    this._save();
   }
 
   importTxt(id: number, txt: string): void {
@@ -50,10 +88,19 @@ export class DeckService {
     if (!deck) {
       return;
     }
-    const importedDeck = this._importTxtService.import(txt);
+    const importedDeck = this._deckBuilderService.build(txt);
     deck.mainboard = importedDeck.mainboard;
     deck.sideboard = importedDeck.sideboard;
+    this._updateDeckColors(deck);
     this._save();
+  }
+
+  private _updateDeckColors(deck: Deck): void {
+    for (const deckCard of deck.mainboard) {
+      deckCard.card = this._cardService.getCached(deckCard.name);
+    }
+
+    deck.colors = this._deckBuilderService.calculateColors(deck);
   }
 
   private _load(): void {
@@ -69,7 +116,7 @@ export class DeckService {
   private _save(): void {
     localStorage.setItem(
       this._storageKey,
-      JSON.stringify(this._decks)
+      JSON.stringify(this._sanitizeDecks())
     );
   }
 
