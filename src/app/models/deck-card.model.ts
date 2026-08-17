@@ -4,4 +4,5 @@ export interface DeckCard {
   quantity: number;
   name: string;
   card?: Card;
+  notFound?: boolean;
 }

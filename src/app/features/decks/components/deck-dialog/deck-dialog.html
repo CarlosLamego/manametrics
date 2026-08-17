@@ -1,4 +1,6 @@
-<h2 mat-dialog-title>Novo Deck</h2>
+<h2 mat-dialog-title>
+  {{ data ? 'Editar Deck' : 'Novo Deck' }}
+</h2>
 
 <form [formGroup]="deckForm" (ngSubmit)="save()">
   <mat-dialog-content>
@@ -13,11 +15,18 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Decklist (opcional)</mat-label>
+      <mat-form-field appearance="outline">
+        <mat-label>Decklist (opcional)</mat-label>
 
-      <textarea matInput rows="12" formControlName="decklist">
-  </textarea>
+        <textarea matInput rows="12" formControlName="decklist"> </textarea>
+      </mat-form-field>
 
+      <input #fileInput type="file" accept=".txt" hidden (change)="onFileSelected($event)" />
+
+      <button mat-button type="button" (click)="fileInput.click()">
+        <mat-icon>upload_file</mat-icon>
+        Importar TXT
+      </button>
     </mat-form-field>
   </mat-dialog-content>
 

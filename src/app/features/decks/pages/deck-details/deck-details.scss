@@ -1,42 +1,75 @@
 .page {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.deck-columns {
-    display: flex;
-    gap: 2rem;
-    align-items: flex-start;
+
+.deck-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(260px, 3fr);
+  gap: 1rem;
+  align-items: start;
 }
+
 
 .mainboard {
-    flex: 7;
+  min-width: 0;
 }
+
+
+.mainboard > h2,
+.sideboard > h2 {
+  margin: 0 0 1rem;
+}
+
+
+.mainboard-sections {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .75rem;
+}
+
+
+.deck-section {
+  background: #181818;
+  border: 1px solid #2d2d2d;
+  border-radius: 8px;
+  overflow: visible;
+}
+
+
+.deck-section h3 {
+  margin: 0;
+  padding: .6rem .75rem;
+  font-size: .9rem;
+  font-weight: 600;
+  color: #aaa;
+  border-bottom: 1px solid #2d2d2d;
+}
+
 
 .sideboard {
-    flex: 3;
-    background: #181818;
-    border: 1px solid #2d2d2d;
-    border-radius: 10px;
-    padding: 1rem;
+  background: #181818;
+  border: 1px solid #2d2d2d;
+  border-radius: 8px;
+  padding: 1rem;
+  min-width: 0;
 }
 
-.deck-card {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: .75rem;
+.sideboard-column {
+  min-width: 0;
 }
 
-.deck-card img {
-    width: 60px;
-    border-radius: 6px;
-    box-shadow: 0 2px 8px rgb(0 0 0 / 35%);
-    flex-shrink: 0;
+.sideboard-column > h2 {
+  margin: 0 0 1rem;
 }
 
-.deck-card span {
-    font-size: 1rem;
-    font-weight: 500;
+.stats-section {
+  width: 100%;
+}
+
+
+.mainboard-sections app-deck-card-row {
+  display: block;
 }

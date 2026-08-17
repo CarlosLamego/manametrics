@@ -10,11 +10,15 @@
       {{ color }}
     </span>
     }
-<button
-  type="button"
-  (click)="onImportClick()">
-  Importar TXT
-</button>
+  </div>
+
+  <div class="deck-actions">
+    <button type="button" (click)="onEditClick()">
+      Editar Deck
+    </button>
+    <button type="button" (click)="onExportClick()">
+      Exportar TXT
+    </button>
   </div>
 
 </section>

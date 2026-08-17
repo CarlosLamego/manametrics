@@ -1,9 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, of } from 'rxjs';
+import { catchError, map, of } from 'rxjs';
 import { Card, CardColor } from '../models/card.model';
 import { ScryfallCardResponse } from '../models/scryfall-card-response.model';
-
 
 @Injectable({
   providedIn: 'root'
@@ -45,13 +44,17 @@ export class CardService {
           this._cards.set(key, mappedCard);
 
           return mappedCard;
+        }),
 
+        catchError(() => {
+          console.warn('CARTA NÃO ENCONTRADA:', name);
+          return of(null);
         })
       );
-
   }
+
   getCached(name: string): Card | undefined {
-    return this._cards.get(name);
+    return this._cards.get(name.toLowerCase());
   }
 
 }

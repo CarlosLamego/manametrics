@@ -30,6 +30,33 @@ export class DeckService {
     this._save();
   }
 
+  update(
+    id: number,
+    deckData: {
+      name: string;
+      format: string;
+      decklist?: string;
+    }
+  ): void {
+    const deck = this.getById(id);
+    if (!deck) {
+      return;
+    }
+    deck.name = deckData.name;
+    deck.format = deckData.format;
+    if (deckData.decklist?.trim()) {
+      const importedDeck =
+        this._deckBuilderService.build(deckData.decklist);
+      deck.mainboard = importedDeck.mainboard;
+      deck.sideboard = importedDeck.sideboard;
+    } else {
+      deck.mainboard = [];
+      deck.sideboard = [];
+    }
+    this._updateDeckColors(deck);
+    this._save();
+  }
+
   private _createDeck(deck: {
     name: string;
     format: string;

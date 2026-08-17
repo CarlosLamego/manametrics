@@ -2,45 +2,54 @@
 
 <section class="page">
 
-  <app-deck-header [deck]="deck" (importDeck)="openImportDialog()">
-  </app-deck-header>
+<app-deck-header
+  [deck]="deck"
+  (editDeck)="openEditDialog()"
+  (exportDeck)="exportDeck()">
+</app-deck-header>
 
-  <section class="deck-columns">
-
-    <section class="mainboard">
-
+  <section class="deck-layout">
+    <!-- MAINBOARD -->
+    <main class="mainboard">
       <h2>Mainboard</h2>
+      <section class="mainboard-sections">
+        @for (section of sections; track section.title) {
+        <section class="deck-section">
+          <h3>
+            {{ section.title }} ({{ section.totalCards }})
+          </h3>
+          @for (deckCard of section.cards; track deckCard.name) {
+          <app-deck-card-row [deckCard]="deckCard">
+          </app-deck-card-row>
+          }
+        </section>
+        }
+      </section>
+    </main>
 
-      @for (deckCard of deck.mainboard; track deckCard.name) {
-
-      <app-deck-card-row [deckCard]="deckCard">
-      </app-deck-card-row>
-
-      }
-
-    </section>
-
-    <aside class="sideboard">
-
+    <!-- SIDEBOARD -->
+    <aside class="sideboard-column">
       <h2>Sideboard</h2>
-
-      @for (deckCard of deck.sideboard; track deckCard.name) {
-
-      <app-deck-card-row [deckCard]="deckCard">
-      </app-deck-card-row>
-
-      }
-
+      <section class="sideboard">
+        @for (deckCard of deck.sideboard; track deckCard.name) {
+        <app-deck-card-row [deckCard]="deckCard">
+        </app-deck-card-row>
+        }
+      </section>
     </aside>
-
   </section>
 
+  <!-- ESTATÍSTICAS -->
+  @if (stats) {
+  <section class="stats-section">
+    <app-deck-stats [stats]="stats">
+    </app-deck-stats>
+  </section>
+  }
 </section>
 
 } @else {
-
 <section class="page">
   <h1>Deck não encontrado</h1>
 </section>
-
 }

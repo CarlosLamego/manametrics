@@ -1,5 +1,7 @@
 import { Component, input } from '@angular/core';
+
 import { DeckCard } from '../../../../models/deck-card.model';
+
 import { CardPreview } from '../../../cards/components/card-preview/card-preview';
 
 @Component({
@@ -9,7 +11,5 @@ import { CardPreview } from '../../../cards/components/card-preview/card-preview
   styleUrl: './deck-card-row.scss',
 })
 export class DeckCardRow {
-
   deckCard = input.required<DeckCard>();
-
 }

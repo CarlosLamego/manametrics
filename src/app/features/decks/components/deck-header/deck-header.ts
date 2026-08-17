@@ -1,8 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { Deck } from '../../../../models/deck.model';
 
-
-
 @Component({
   selector: 'app-deck-header',
   imports: [],
@@ -10,12 +8,17 @@ import { Deck } from '../../../../models/deck.model';
   styleUrl: './deck-header.scss',
 })
 export class DeckHeader {
+
   deck = input.required<Deck>();
 
-  importDeck = output<void>();
+  editDeck = output<void>();
+  exportDeck = output<void>();
 
-    onImportClick(): void {
-    console.log('HEADER');
-    this.importDeck.emit();
+  onEditClick(): void {
+    this.editDeck.emit();
+  }
+
+  onExportClick(): void {
+    this.exportDeck.emit();
   }
 }

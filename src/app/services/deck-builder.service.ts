@@ -1,6 +1,5 @@
 import { Injectable, inject } from '@angular/core';
 import { Deck } from '../models/deck.model';
-import { Card } from '../models/card.model';
 import { ImportTxtService } from './import-txt.service';
 import { CardService } from './card.service';
 
@@ -16,25 +15,30 @@ export class DeckBuilderService {
     return this._importTxtService.import(txt);
   }
 
+  toTxt(deck: Deck): string {
+    const mainboard = deck.mainboard
+      .map(deckCard => `${deckCard.quantity} ${deckCard.name}`)
+      .join('\n');
+
+    const sideboard = deck.sideboard
+      .map(deckCard => `${deckCard.quantity} ${deckCard.name}`)
+      .join('\n');
+
+    return `${mainboard}\n\n${sideboard}`;
+  }
+
   calculateColors(deck: Deck): string[] {
-
     const colors = new Set<string>();
-
     for (const deckCard of deck.mainboard) {
-
       const card = deckCard.card ??
         this._cardService.getCached(deckCard.name);
-
       if (!card) {
         continue;
       }
-
       for (const color of card.colors) {
         colors.add(color);
       }
-
     }
-
     return [...colors];
   }
 
