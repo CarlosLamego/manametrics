@@ -15,19 +15,32 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-form-field appearance="outline">
-        <mat-label>Decklist (opcional)</mat-label>
-
-        <textarea matInput rows="12" formControlName="decklist"> </textarea>
-      </mat-form-field>
-
-      <input #fileInput type="file" accept=".txt" hidden (change)="onFileSelected($event)" />
-
-      <button mat-button type="button" (click)="fileInput.click()">
-        <mat-icon>upload_file</mat-icon>
-        Importar TXT
-      </button>
+      <mat-label>Adicionar carta</mat-label>
+      <input matInput [formControl]="cardSearchControl" autocomplete="off" />
     </mat-form-field>
+    @if (cardSuggestions.length > 0) {
+    <div class="card-suggestions">
+      @for (suggestion of cardSuggestions; track suggestion) {
+      <button type="button" class="card-suggestion" (click)="selectCard(suggestion)">
+        {{ suggestion }}
+      </button>
+      }
+    </div>
+    }
+
+    <mat-form-field appearance="outline">
+      <mat-label>Decklist (opcional)</mat-label>
+
+      <textarea matInput rows="12" formControlName="decklist">
+    </textarea>
+    </mat-form-field>
+
+    <input #fileInput type="file" accept=".txt" hidden (change)="onFileSelected($event)" />
+
+    <button mat-button type="button" (click)="fileInput.click()">
+      <mat-icon>upload_file</mat-icon>
+      Importar TXT
+    </button>
   </mat-dialog-content>
 
   <div class="actions">

@@ -19,7 +19,7 @@ import { DeckSection } from '../../../../models/deck-section.model';
 
 @Component({
   selector: 'app-deck-details',
-  imports: [DeckHeader, DeckCardRow, DeckStatsComponent, DeckDialog],
+  imports: [DeckHeader, DeckCardRow, DeckStatsComponent],
   templateUrl: './deck-details.html',
   styleUrl: './deck-details.scss',
 })

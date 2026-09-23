@@ -12,6 +12,12 @@ export class CardService {
   private readonly _http = inject(HttpClient);
   private readonly _cards = new Map<string, Card>();
 
+  getSuggestions(query: string) {
+    return this._http.get<{ data: string[] }>(
+      `https://api.scryfall.com/cards/autocomplete?q=${encodeURIComponent(query)}`
+    );
+  }
+
   getByName(name: string) {
 
     const key = name.toLowerCase();
@@ -56,5 +62,7 @@ export class CardService {
   getCached(name: string): Card | undefined {
     return this._cards.get(name.toLowerCase());
   }
+
+
 
 }
