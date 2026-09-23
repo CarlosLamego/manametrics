@@ -17,10 +17,12 @@ export class DeckBuilderService {
 
   toTxt(deck: Deck): string {
     const mainboard = deck.mainboard
+      .filter(deckCard => deckCard.quantity > 0 && deckCard.name?.trim())
       .map(deckCard => `${deckCard.quantity} ${deckCard.name}`)
       .join('\n');
 
     const sideboard = deck.sideboard
+      .filter(deckCard => deckCard.quantity > 0 && deckCard.name?.trim())
       .map(deckCard => `${deckCard.quantity} ${deckCard.name}`)
       .join('\n');
 

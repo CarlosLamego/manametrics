@@ -11,6 +11,12 @@ export class DeckService {
   private readonly _storageKey = 'manametrics.decks';
   private _decks: Deck[] = [];
   private readonly _cardService = inject(CardService);
+  private _getNextId(): number {
+    if (this._decks.length === 0) {
+      return 1;
+    }
+    return Math.max(...this._decks.map(deck => deck.id)) + 1;
+  }
 
   constructor() {
     this._load();
@@ -57,6 +63,11 @@ export class DeckService {
     this._save();
   }
 
+  delete(id: number): void {
+    this._decks = this._decks.filter(deck => deck.id !== id);
+    this._save();
+  }
+
   private _createDeck(deck: {
     name: string;
     format: string;
@@ -64,7 +75,7 @@ export class DeckService {
   }): Deck {
 
     const newDeck: Deck = {
-      id: this._decks.length + 1,
+      id: this._getNextId(), 
       name: deck.name,
       format: deck.format,
       colors: [],

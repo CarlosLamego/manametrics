@@ -18,15 +18,15 @@ export class ImportTxtService {
 
         let readingMainboard = true;
         for (const line of lines) {
-            if (line === '') {
+            if (line === '' || line.toLowerCase() === 'sideboard') {
                 readingMainboard = false;
+                continue;
+            }
+            const card = this.parseLine(line);
+            if (readingMainboard) {
+                mainboard.push(card);
             } else {
-                const card = this.parseLine(line);
-                if (readingMainboard) {
-                    mainboard.push(card);
-                } else {
-                    sideboard.push(card);
-                }
+                sideboard.push(card);
             }
         }
         return {

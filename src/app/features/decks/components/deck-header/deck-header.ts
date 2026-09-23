@@ -13,6 +13,7 @@ export class DeckHeader {
 
   editDeck = output<void>();
   exportDeck = output<void>();
+  deleteDeck = output<void>();
 
   onEditClick(): void {
     this.editDeck.emit();
@@ -20,5 +21,9 @@ export class DeckHeader {
 
   onExportClick(): void {
     this.exportDeck.emit();
+  }
+
+  onDeleteClick(): void {
+    this.deleteDeck.emit();
   }
 }

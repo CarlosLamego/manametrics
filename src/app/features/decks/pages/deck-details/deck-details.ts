@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Deck } from '../../../../models/deck.model';
 import { DeckService } from '../../../../services/deck.service';
 import { DeckHeader } from '../../components/deck-header/deck-header';
@@ -31,6 +31,7 @@ export class DeckDetails implements OnInit {
   private readonly _dialog = inject(MatDialog);
   private readonly _deckBuilderService = inject(DeckBuilderService);
   private readonly _deckAnalysisService = inject(DeckAnalysisService);
+  private readonly _router = inject(Router);
 
   deck?: Deck;
   stats?: DeckStats;
@@ -122,6 +123,7 @@ export class DeckDetails implements OnInit {
     console.log('Sections:', this.sections);
   }
   exportDeck(): void {
+
     if (!this.deck) {
       return;
     }
@@ -143,4 +145,17 @@ export class DeckDetails implements OnInit {
     URL.revokeObjectURL(url);
   }
 
+  deleteDeck(): void {
+    if (!this.deck) {
+      return;
+    }
+    const confirmed = confirm(
+      `Tem certeza que deseja excluir o deck "${this.deck.name}"?`
+    );
+    if (!confirmed) {
+      return;
+    }
+    this._deckService.delete(this.deck.id);
+    this._router.navigate(['/decks']);
+  }
 }
